@@ -1,0 +1,167 @@
+MariaDB [emp_db]> SELECT *
+    -> FROM EMP
+    -> WHERE HIREDATE < '1980-06-30'
+    ->    OR HIREDATE > '1981-12-31';
+Empty set (0.031 sec)
+
+MariaDB [emp_db]> SELECT COUNT(*) FROM EMP;
++----------+
+| COUNT(*) |
++----------+
+|        8 |
++----------+
+1 row in set (0.003 sec)
+
+MariaDB [emp_db]> SELECT *
+    -> FROM EMP
+    -> WHERE HIREDATE > '1980-01-01';
++-------+--------+-----------+------------+------+------+--------+
+| EMPNO | ENAME  | JOB       | HIREDATE   | SAL  | COMM | DEPTNO |
++-------+--------+-----------+------------+------+------+--------+
+|  7369 | SMITH  | CLERK     | 1980-12-17 |  800 | NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 1981-02-20 | 1600 |  300 |     30 |
+|  7521 | WARD   | SALESMAN  | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER   | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER   | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 1981-06-09 | 2450 | NULL |     10 |
+|  7839 | KING   | PRESIDENT | 1981-11-17 | 5000 | NULL |     10 |
++-------+--------+-----------+------------+------+------+--------+
+8 rows in set (0.001 sec)
+
+MariaDB [emp_db]>   SELECT ENAME
+    -> FROM EMP
+    -> WHERE ENAME LIKE '_A%';
++--------+
+| ENAME  |
++--------+
+| WARD   |
+| MARTIN |
++--------+
+2 rows in set (0.003 sec)
+
+MariaDB [emp_db]> SELECT ENAME
+    -> FROM EMP
+    -> WHERE LENGTH(ENAME) = 5;
++-------+
+| ENAME |
++-------+
+| SMITH |
+| ALLEN |
+| JONES |
+| BLAKE |
+| CLARK |
++-------+
+5 rows in set (0.003 sec)
+
+MariaDB [emp_db]> SELECT ENAME
+    -> FROM EMP
+    -> WHERE ENAME LIKE '%E_';
++-------+
+| ENAME |
++-------+
+| ALLEN |
+| JONES |
++-------+
+2 rows in set (0.001 sec)
+
+MariaDB [emp_db]> SELECT ENAME
+    -> FROM EMP
+    -> WHERE JOB NOT IN ('SALESMAN', 'CLERK', 'ANALYST');
++-------+
+| ENAME |
++-------+
+| JONES |
+| BLAKE |
+| CLARK |
+| KING  |
++-------+
+4 rows in set (0.003 sec)
+
+MariaDB [emp_db]> SELECT ENAME, (SAL * 12) AS ANNUAL_SALARY
+    -> FROM EMP
+    -> ORDER BY SAL DESC;
++--------+---------------+
+| ENAME  | ANNUAL_SALARY |
++--------+---------------+
+| KING   |         60000 |
+| JONES  |         35700 |
+| BLAKE  |         34200 |
+| CLARK  |         29400 |
+| ALLEN  |         19200 |
+| WARD   |         15000 |
+| MARTIN |         15000 |
+| SMITH  |          9600 |
++--------+---------------+
+8 rows in set (0.007 sec)
+
+MariaDB [emp_db]> SELECT
+    ->     ENAME,
+    ->     SAL,
+    ->     SAL*0.15 AS HRA,
+    ->     SAL*0.10 AS DA,
+    ->     SAL*0.05 AS PF,
+    ->     (SAL + SAL*0.15 + SAL*0.10 - SAL*0.05) AS TOTALSAL
+    -> FROM EMP
+    -> ORDER BY TOTALSAL;
++--------+------+--------+--------+--------+----------+
+| ENAME  | SAL  | HRA    | DA     | PF     | TOTALSAL |
++--------+------+--------+--------+--------+----------+
+| SMITH  |  800 | 120.00 |  80.00 |  40.00 |   960.00 |
+| WARD   | 1250 | 187.50 | 125.00 |  62.50 |  1500.00 |
+| MARTIN | 1250 | 187.50 | 125.00 |  62.50 |  1500.00 |
+| ALLEN  | 1600 | 240.00 | 160.00 |  80.00 |  1920.00 |
+| CLARK  | 2450 | 367.50 | 245.00 | 122.50 |  2940.00 |
+| BLAKE  | 2850 | 427.50 | 285.00 | 142.50 |  3420.00 |
+| JONES  | 2975 | 446.25 | 297.50 | 148.75 |  3570.00 |
+| KING   | 5000 | 750.00 | 500.00 | 250.00 |  6000.00 |
++--------+------+--------+--------+--------+----------+
+8 rows in set (0.003 sec)
+
+MariaDB [emp_db]> UPDATE EMP
+    -> SET SAL = SAL * 1.10
+    -> WHERE COMM IS NULL;
+Query OK, 5 rows affected (0.016 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+MariaDB [emp_db]> SELECT ENAME, SAL*1.20 AS INCREMENTED_SALARY
+    -> FROM EMP
+    -> WHERE (SAL * 1.20) > 3000;
++-------+--------------------+
+| ENAME | INCREMENTED_SALARY |
++-------+--------------------+
+| JONES |            3927.60 |
+| BLAKE |            3762.00 |
+| CLARK |            3234.00 |
+| KING  |            6600.00 |
++-------+--------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [emp_db]> SELECT ENAME, SAL
+    -> FROM EMP
+    -> WHERE LENGTH(SAL) >= 3;
++--------+------+
+| ENAME  | SAL  |
++--------+------+
+| SMITH  |  880 |
+| ALLEN  | 1600 |
+| WARD   | 1250 |
+| JONES  | 3273 |
+| MARTIN | 1250 |
+| BLAKE  | 3135 |
+| CLARK  | 2695 |
+| KING   | 5500 |
++--------+------+
+8 rows in set (0.001 sec)
+
+MariaDB [emp_db]> SELECT ENAME
+    -> FROM EMP
+    -> WHERE ENAME LIKE '%E_';
++-------+
+| ENAME |
++-------+
+| ALLEN |
+| JONES |
++-------+
+2 rows in set (0.000 sec)
+ 
