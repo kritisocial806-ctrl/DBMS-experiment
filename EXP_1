@@ -1,0 +1,162 @@
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| iilm               |
+| information_schema |
+| kriti              |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| student_info       |
+| test               |
++--------------------+
+8 rows in set (0.059 sec)
+
+MariaDB [(none)]> use kriti;
+Database changed
+MariaDB [kriti]> show tables;
+Empty set (0.001 sec)
+
+MariaDB [kriti]>
+MariaDB [kriti]> CREATE TABLE DEPARTMENT (
+    ->     DEPTNO INT(2) PRIMARY KEY,
+    ->     DNAME VARCHAR(15) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.023 sec)
+
+MariaDB [kriti]> CREATE TABLE EMPLOYEE (
+    ->     EMPNO INT(4) PRIMARY KEY,
+    ->     ENAME VARCHAR(10) NOT NULL,
+    ->     JOB VARCHAR(9),
+    ->     MGR INT(4),
+    ->     HIREDATE DATE,
+    ->     SAL DECIMAL(7,2),
+    ->     COMM DECIMAL(7,2),
+    ->     DEPTNO INT(2),
+    ->
+    ->     CONSTRAINT fk_dept
+    ->         FOREIGN KEY (DEPTNO) REFERENCES DEPARTMENT(DEPTNO),
+    ->
+    ->     CONSTRAINT fk_mgr
+    ->         FOREIGN KEY (MGR) REFERENCES EMPLOYEE(EMPNO)
+    -> );
+Query OK, 0 rows affected (0.032 sec)
+
+MariaDB [kriti]> INSERT INTO DEPARTMENT (DEPTNO, DNAME) VALUES
+    -> (10, 'RESEARCH'),
+    -> (20, 'ACCOUNTING'),
+    -> (30, 'SALES'),
+    -> (40, 'OPERATIONS');
+Query OK, 4 rows affected (0.082 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [kriti]> INSERT INTO EMPLOYEE (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) VALUES
+    -> (7369, 'SMITH',  'CLERK',    7902, '1980-12-17',  800,  NULL, 20),
+    -> (7499, 'ALLEN',  'SALESMAN', 7698, '1981-02-20', 1600,  300,  30),
+    -> (7521, 'WARD',   'SALESMAN', 7698, '1981-02-22', 1250,  500,  30),
+    -> (7566, 'JONES',  'MANAGER',  7839, '1981-04-02', 2975,  NULL, 20),
+    -> (7654, 'MARTIN', 'SALESMAN', 7698, '1981-09-28', 1250, 1400,  30),
+    -> (7698, 'BLAKE',  'MANAGER',  7839, '1981-05-01', 2850,  NULL, 30),
+    -> (7782, 'CLARK',  'MANAGER',  7839, '1981-06-09', 2450,  NULL, 10),
+    -> (7788, 'SCOTT',  'ANALYST',  7566, '1982-12-09', 3000,  NULL, 20),
+    -> (7839, 'KING',   'PRESIDENT',NULL, '1981-11-17', 5000,  NULL, 10),
+    -> (7844, 'TURNER', 'SALESMAN', 7698, '1981-09-08', 1500,    0,  30),
+    -> (7876, 'ADAMS',  'CLERK',    7788, '1983-01-12', 1100,  NULL, 20),
+    -> (7900, 'JAMES',  'CLERK',    7698, '1981-12-03',  950,  NULL, 30),
+    -> (7902, 'FORD',   'ANALYST',  7566, '1981-12-03', 3000,  NULL, 20),
+    -> (7934, 'MILLER', 'CLERK',    7782, '1982-01-23', 1300,  NULL, 10);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`kriti`.`employee`, CONSTRAINT `fk_mgr` FOREIGN KEY (`MGR`) REFERENCES `employee` (`EMPNO`))
+MariaDB [kriti]> DROP TABLE IF EXISTS EMPLOYEE;
+Query OK, 0 rows affected (0.070 sec)
+
+MariaDB [kriti]> CREATE TABLE EMPLOYEE (
+    ->     EMPNO INT(4) PRIMARY KEY,
+    ->     ENAME VARCHAR(10) NOT NULL,
+    ->     JOB VARCHAR(9),
+    ->     MGR INT(4),
+    ->     HIREDATE DATE,
+    ->     SAL DECIMAL(7,2),
+    ->     COMM DECIMAL(7,2),
+    ->     DEPTNO INT(2),
+    ->
+    ->     CONSTRAINT fk_dept
+    ->         FOREIGN KEY (DEPTNO) REFERENCES DEPARTMENT(DEPTNO),
+    ->
+    ->     CONSTRAINT fk_mgr
+    ->         FOREIGN KEY (MGR) REFERENCES EMPLOYEE(EMPNO)
+    -> );
+Query OK, 0 rows affected (0.048 sec)
+
+MariaDB [kriti]> INSERT INTO EMPLOYEE VALUES
+    -> (7839, 'KING', 'PRESIDENT', NULL, '1981-11-17', 5000, NULL, 10);
+Query OK, 1 row affected (0.010 sec)
+
+MariaDB [kriti]> INSERT INTO EMPLOYEE VALUES
+    -> (7566, 'JONES', 'MANAGER', 7839, '1981-04-02', 2975, NULL, 20),
+    -> (7698, 'BLAKE', 'MANAGER', 7839, '1981-05-01', 2850, NULL, 30),
+    -> (7782, 'CLARK', 'MANAGER', 7839, '1981-06-09', 2450, NULL, 10);
+Query OK, 3 rows affected (0.002 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [kriti]> INSERT INTO EMPLOYEE VALUES
+    -> (7902, 'FORD', 'ANALYST', 7566, '1981-12-03', 3000, NULL, 20),
+    -> (7369, 'SMITH', 'CLERK', 7902, '1980-12-17', 800, NULL, 20),
+    -> (7499, 'ALLEN', 'SALESMAN', 7698, '1981-02-20', 1600, 300, 30),
+    -> (7521, 'WARD', 'SALESMAN', 7698, '1981-02-22', 1250, 500, 30),
+    -> (7654, 'MARTIN', 'SALESMAN', 7698, '1981-09-28', 1250, 1400, 30),
+    -> (7844, 'TURNER', 'SALESMAN', 7698, '1981-09-08', 1500, 0, 30),
+    -> (7788, 'SCOTT', 'ANALYST', 7566, '1982-12-09', 3000, NULL, 20),
+    -> (7876, 'ADAMS', 'CLERK', 7788, '1983-01-12', 1100, NULL, 20),
+    -> (7900, 'JAMES', 'CLERK', 7698, '1981-12-03', 950, NULL, 30),
+    -> (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, NULL, 10);
+Query OK, 10 rows affected (0.002 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [kriti]> describe employee;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| EMPNO    | int(4)       | NO   | PRI | NULL    |       |
+| ENAME    | varchar(10)  | NO   |     | NULL    |       |
+| JOB      | varchar(9)   | YES  |     | NULL    |       |
+| MGR      | int(4)       | YES  | MUL | NULL    |       |
+| HIREDATE | date         | YES  |     | NULL    |       |
+| SAL      | decimal(7,2) | YES  |     | NULL    |       |
+| COMM     | decimal(7,2) | YES  |     | NULL    |       |
+| DEPTNO   | int(2)       | YES  | MUL | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+8 rows in set (0.054 sec)
+
+MariaDB [kriti]> describe department;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| DEPTNO | int(2)      | NO   | PRI | NULL    |       |
+| DNAME  | varchar(15) | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+2 rows in set (0.019 sec)
+
+MariaDB [kriti]> CREATE TABLE Employee_master AS
+    -> SELECT * FROM Employee;
+Query OK, 14 rows affected (0.015 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+MariaDB [kriti]> DELETE FROM Employee_master
+    -> WHERE DeptNo = 10;
+Query OK, 3 rows affected (0.006 sec)
+
+MariaDB [kriti]> UPDATE Employee_master
+    -> SET SAL = SAL + (SAL * 0.10)
+    -> WHERE DeptNo = 20;
+Query OK, 5 rows affected (0.005 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+MariaDB [kriti]> ALTER TABLE Employee_master
+    -> MODIFY SAL DECIMAL(10,2);
+Query OK, 11 rows affected (0.035 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+MariaDB [kriti]> DROP TABLE Employee_master;
+Query OK, 0 rows affected (0.007 sec
